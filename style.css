@@ -67,11 +67,11 @@ body::before {
 
 .mast {
   position: absolute;
-  top: 22px;
-  left: 28px;
-  z-index: 4;
+  top: 26px;
+  left: 32px;
+  z-index: 6;
+  width: 460px;
   pointer-events: none;
-  max-width: 420px;
 }
 
 .kicker, .date, .sub, .insert figcaption, .note .meta, .key button {
@@ -109,10 +109,11 @@ body::before {
 
 .note {
   position: absolute;
-  width: 128px;
+  width: 148px;
   color: var(--ink);
   background: none;
 }
+.note.is-extra { opacity: 0; pointer-events: none; }
 
 .note .idx {
   display: block;
@@ -126,9 +127,10 @@ body::before {
   margin: 1px 0 0;
   font-family: var(--serif);
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.02;
   letter-spacing: 0.02em;
+  color: #2c2826;
 }
 
 .note .meta {
@@ -170,31 +172,47 @@ body::before {
   color: var(--soft);
 }
 
-#freq-box { width: 210px; }
-#freq-box canvas { width: 210px !important; height: 96px !important; display: block; }
+#freq-box {
+  left: 32px;
+  bottom: 24px;
+  top: auto;
+  width: 196px;
+  z-index: 4;
+}
+#freq-box canvas { width: 196px !important; height: 92px !important; display: block; }
 
-#cat-box { width: 96px; }
-#cat-box canvas { width: 96px !important; height: 96px !important; display: block; }
+#cat-box {
+  left: 244px;
+  bottom: 30px;
+  top: auto;
+  width: 84px;
+  z-index: 4;
+}
+#cat-box canvas { width: 84px !important; height: 84px !important; display: block; }
 
-.key {
+.dock {
   position: absolute;
-  top: 18px;
-  right: 24px;
+  right: 32px;
+  bottom: 28px;
   z-index: 5;
   width: 250px;
-  display: flex;
-  flex-flow: row wrap;
-  gap: 3px 10px;
   pointer-events: auto;
 }
-.key p { width: 100%; margin: 0 0 2px; }
-
-.key p {
-  margin: 0 0 4px;
+.dock > p, #reset {
+  margin: 0 0 6px;
   font-family: var(--mono);
   font-size: 8px;
   letter-spacing: 0.16em;
   color: #b07d76;
+}
+#reset { margin-top: 8px; }
+
+.key {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: auto;
 }
 
 .key button {
@@ -222,10 +240,15 @@ body::before {
 }
 
 body.is-filtering .zone[data-cat]:not(.is-on),
-body.is-filtering .note[data-cat]:not(.is-on),
 body.is-filtering .scrap[data-cat]:not(.is-on) {
-  opacity: 0.16;
+  opacity: 0.2;
 }
+body.is-filtering .note[data-cat]:not(.is-on) {
+  opacity: 0;
+  pointer-events: none;
+}
+body.is-filtering .note.is-on { opacity: 1; pointer-events: auto; }
+body.is-filtering .zone.is-on { filter: saturate(1.25); }
 
 #sheet .leader {
   fill: none;
