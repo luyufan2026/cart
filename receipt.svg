@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 160">
+  <defs>
+    <filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter>
+  </defs>
+<path d="M48 12 h78 l8 10 v112 l-8 8 h-70 l-8 -10 V22 Z" fill="#f4f1ea"/>
+  <path d="M60 36 h54 M60 48 h40 M60 60 h54 M60 72 h28 M60 92 h54 M60 104 h36" stroke="#b0aaa2" stroke-width="1"/>
+  <rect x="58" y="116" width="40" height="8" fill="#2a2a2a" opacity="0.7"/>
+<rect x="8" y="8" width="164" height="144" fill="none" stroke="#1c1c1c" stroke-width="1"/>
+</svg>

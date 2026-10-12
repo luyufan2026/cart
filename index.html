@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>THINGS I KEEP SAYING</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="board" id="board">
+    <div class="poster" id="poster">
+    <svg id="sheet" viewBox="0 0 1440 900" width="1440" height="900" role="img" aria-label="Axonometric building of one month of repeated phrases"></svg>
+
+    <header class="mast">
+      <p class="kicker">A LANGUAGE PROGRAM</p>
+      <h1>THINGS I KEEP SAYING</h1>
+      <p class="sub">21 PHRASES FROM ONE MONTH OF MY LIFE</p>
+      <p class="date">2026.09.05 — 2026.10.05</p>
+    </header>
+
+    <div id="layer"></div>
+
+    <figure class="insert" id="freq-box">
+      <figcaption>PHRASE FREQUENCY</figcaption>
+      <canvas id="frequency-chart"></canvas>
+    </figure>
+    <figure class="insert donut" id="cat-box">
+      <figcaption>BY CATEGORY</figcaption>
+      <canvas id="category-chart"></canvas>
+    </figure>
+
+    <div id="tip" role="tooltip" hidden></div>
+    </div>
+  </main>
+
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

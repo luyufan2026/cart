@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160">
+  <defs>
+    <filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter>
+    <radialGradient id="v" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#f4f4f4"/>
+      <stop offset="0.18" stop-color="#d0d0d0"/>
+      <stop offset="0.22" stop-color="#1a1a1a"/>
+      <stop offset="0.72" stop-color="#111"/>
+      <stop offset="0.78" stop-color="#3a3a3a"/>
+      <stop offset="1" stop-color="#0e0e0e"/>
+    </radialGradient>
+  </defs>
+<circle cx="96" cy="80" r="58" fill="url(#v)"/>
+  <circle cx="96" cy="80" r="8" fill="#e8e8e8"/>
+  <circle cx="96" cy="80" r="2" fill="#111"/>
+  <rect x="132" y="36" width="46" height="88" fill="#2e2e2e"/>
+<rect x="8" y="8" width="184" height="144" fill="none" stroke="#1c1c1c" stroke-width="1"/>
+</svg>

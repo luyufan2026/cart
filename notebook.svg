@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 170">
+  <defs>
+    <filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2"/></filter>
+  </defs>
+<g transform="translate(16,14)">
+    <rect width="208" height="142" fill="#8a8680"/>
+    <rect x="18" y="16" width="118" height="110" fill="#f3f1ec"/>
+    <path d="M28 36 h90 M28 48 h90 M28 60 h78 M28 72 h90 M28 84 h60" stroke="#b9b3aa" stroke-width="1"/>
+    <rect x="122" y="28" width="70" height="48" fill="#2c2c2c"/>
+    <rect x="128" y="34" width="58" height="36" fill="#9a9a9a"/>
+    <rect x="146" y="76" width="34" height="6" fill="#1b1b1b"/>
+  </g>
+<rect x="10" y="10" width="220" height="150" fill="none" stroke="#1c1c1c" stroke-width="1"/>
+</svg>

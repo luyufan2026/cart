@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <defs>
+    <filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2"/></filter>
+    <linearGradient id="w" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbfbfb"/>
+      <stop offset="1" stop-color="#c5c5c5"/>
+    </linearGradient>
+  </defs>
+<polygon points="0,0 150,0 118,160 0,160" fill="url(#w)"/>
+  <polygon points="150,0 240,0 240,160 118,160" fill="#dedede"/>
+  <polygon points="0,108 118,96 240,112 240,160 0,160" fill="#bfbfbf"/>
+  <rect x="28" y="36" width="46" height="34" fill="#8a8a8a"/>
+<rect x="8" y="8" width="224" height="144" fill="none" stroke="#1c1c1c" stroke-width="1"/>
+</svg>

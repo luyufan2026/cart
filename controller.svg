@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 150">
+  <defs>
+    <filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2"/></filter>
+  </defs>
+<path d="M34 58 h172 c18 0 28 16 24 32 l-14 22 h-40 l-10 -16 h-92 l-10 16 H36 L24 90 C18 74 22 58 34 58 Z" fill="#2a2a2a"/>
+  <circle cx="78" cy="78" r="10" fill="#e6e6e6"/>
+  <circle cx="168" cy="70" r="4" fill="#eee"/>
+  <circle cx="180" cy="80" r="4" fill="#eee"/>
+  <circle cx="168" cy="90" r="4" fill="#eee"/>
+  <circle cx="156" cy="80" r="4" fill="#eee"/>
+<rect x="8" y="8" width="224" height="134" fill="none" stroke="#1c1c1c" stroke-width="1"/>
+</svg>
