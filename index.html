@@ -6,44 +6,71 @@
   <title>THINGS I KEEP SAYING</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="board" id="board">
-    <div class="poster" id="poster">
-    <svg id="sheet" viewBox="0 0 1440 900" width="1440" height="900" role="img" aria-label="Axonometric building of one month of repeated phrases"></svg>
-
+  <div class="sheet">
     <header class="mast">
-      <p class="kicker">A LANGUAGE PROGRAM</p>
-      <h1>THINGS I KEEP SAYING</h1>
-      <p class="sub">21 PHRASES FROM ONE MONTH OF MY LIFE</p>
-      <p class="date">2026.09.05 — 2026.10.05</p>
+      <div class="titles">
+        <h1>THINGS I KEEP SAYING</h1>
+        <p class="sub">21 PHRASES FROM ONE MONTH OF MY LIFE</p>
+        <p class="dates">2026.09.05 — 2026.10.05</p>
+        <p class="lede">A personal archive of repeated language, habits, moods, and daily life.</p>
+      </div>
+      <aside class="legend" aria-label="Legend">
+        <p class="legend-title">LEGEND</p>
+        <p><span class="swatch circle"></span> circle size = how many times the phrase was said</p>
+        <p><span class="swatch line"></span> line thickness = repetitions that day</p>
+        <p><span class="swatch dots"></span> dot size = category occurrences per day</p>
+        <p class="legend-colors">
+          <span><i style="background:#e4d07a"></i>School / work</span>
+          <span><i style="background:#8eb0d0"></i>Daily life</span>
+          <span><i style="background:#86b896"></i>Smoking</span>
+          <span><i style="background:#e3a8bc"></i>Relationships</span>
+          <span><i style="background:#e0a86a"></i>Entertainment</span>
+          <span><i style="background:#b5a6d6"></i>Emotion</span>
+        </p>
+      </aside>
     </header>
 
-    <div id="layer"></div>
+    <nav id="filters" aria-label="Category filter"></nav>
 
-    <figure class="insert" id="freq-box">
-      <figcaption>TOP PHRASES</figcaption>
-      <canvas id="frequency-chart"></canvas>
-    </figure>
-    <figure class="insert donut" id="cat-box">
-      <figcaption>FIVE GROUPS</figcaption>
-      <canvas id="category-chart"></canvas>
-    </figure>
+    <section class="plot" aria-label="Phrase timeline">
+      <svg id="flow" viewBox="0 -36 1180 856" role="img" aria-label="Phrases connected to the days they were said"></svg>
+      <div class="plot-bars">
+        <canvas id="daily-chart" aria-label="Total phrases spoken each day"></canvas>
+      </div>
+      <div id="annos" class="annos"></div>
+    </section>
 
-    <aside class="dock">
-      <p>PROGRAM</p>
-      <div id="key" class="key"></div>
-      <button type="button" id="reset">RESET</button>
-    </aside>
+    <section class="matrix-block">
+      <h2>CATEGORY BY DAY</h2>
+      <div class="matrix-frame">
+        <canvas id="matrix-chart" aria-label="Category occurrences across the month"></canvas>
+      </div>
+    </section>
 
-    <div id="tip" role="tooltip" hidden></div>
-    </div>
-  </main>
+    <aside id="detail" hidden></aside>
+
+    <footer class="footnotes">
+      <h2>NOTES</h2>
+      <ul>
+        <li>21 phrases tracked from Sep 05 to Oct 05.</li>
+        <li>Each phrase belongs to one primary category.</li>
+        <li>Circle size is the total count for the month, added up from each day.</li>
+        <li>Line thickness is how many times that phrase was said on that day.</li>
+        <li>Dot size is the category total for that day.</li>
+        <li>A month of my life can be reconstructed from the things I keep repeating.</li>
+        <li>This is a personal dataset, not a scientific sample.</li>
+      </ul>
+    </footer>
+  </div>
+
+  <div id="tip" role="tooltip" hidden></div>
 
   <script src="vendor/chart.umd.min.js"></script>
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+  <script src="data.js?v=6"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>

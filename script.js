@@ -1,687 +1,691 @@
-const OX = 800;
-const OY = 408;
-const UX = 40;
-const UY = 15;
-const UZ = 30;
-
-const GROUPS = [
-  { id: "daily", name: "DAILY LIFE", color: "#d5e5f5" },
-  { id: "work", name: "SCHOOL / WORK", color: "#f4e7a4" },
-  { id: "relationships", name: "RELATIONSHIPS", color: "#f6d5e3" },
-  { id: "habits", name: "HABITS", color: "#d5ecc8" },
-  { id: "inner", name: "INNER WORLD", color: "#e4dcf3" }
+const CATS = [
+  { id: "schoolWork", name: "SCHOOL / WORK", color: "#e4d07a" },
+  { id: "dailyLife", name: "DAILY LIFE", color: "#8eb0d0" },
+  { id: "smoking", name: "SMOKING", color: "#86b896" },
+  { id: "relationships", name: "RELATIONSHIPS", color: "#e3a8bc" },
+  { id: "entertainment", name: "ENTERTAINMENT", color: "#e0a86a" },
+  { id: "inner", name: "EMOTION / INNER WORLD", color: "#b5a6d6" }
 ];
 
-const FRAME = "#f7f5f2";
-const GROUP_OF = {
-  9: "daily", 12: "daily", 16: "daily", 18: "daily", 10: "daily",
-  1: "work", 5: "work", 19: "work", 15: "work",
-  13: "relationships", 14: "relationships",
-  4: "habits", 8: "habits", 17: "habits", 6: "habits", 7: "habits",
-  3: "inner", 2: "inner", 20: "inner", 11: "inner", 21: "inner"
+const PLACE = {
+  1: { x: 0.05, y: 118, label: "n" },
+  2: { x: 0.20, y: 86, label: "n" },
+  3: { x: 0.36, y: 48, label: "n" },
+  13: { x: 0.50, y: 132, label: "n" },
+  4: { x: 0.66, y: 78, label: "n" },
+  7: { x: 0.84, y: 52, label: "n" },
+  5: { x: 0.14, y: 248, label: "n" },
+  11: { x: 0.30, y: 210, label: "n" },
+  20: { x: 0.44, y: 248, label: "s" },
+  14: { x: 0.58, y: 228, label: "n" },
+  8: { x: 0.76, y: 196, label: "n" },
+  15: { x: 0.94, y: 148, label: "n" },
+  9: { x: 0.02, y: 360, label: "s" },
+  19: { x: 0.18, y: 360, label: "n" },
+  16: { x: 0.34, y: 360, label: "n" },
+  21: { x: 0.50, y: 372, label: "s" },
+  17: { x: 0.66, y: 330, label: "n" },
+  6: { x: 0.84, y: 300, label: "s" },
+  12: { x: 0.10, y: 470, label: "n" },
+  10: { x: 0.90, y: 400, label: "w" },
+  18: { x: 0.78, y: 470, label: "n" }
 };
 
-const FEATURED = new Set([3, 1, 2, 5, 13, 4, 8, 9]);
-
-const ANCHOR_AT = {
-  9: [1.6, 4.2, 3.45], 12: [5.3, 8.6, 1.1], 16: [1.3, 3.5, 3.45],
-  18: [8.2, 3.6, 3.4], 10: [8.7, 4.3, 3.4],
-  1: [1.6, 1.3, 5.15], 5: [2.3, 2.1, 5.15], 19: [1.2, 2.3, 5.15],
-  15: [8.1, 5.5, 4.75],
-  13: [1.6, 1.2, 6.55], 14: [2.5, 1.7, 6.55],
-  4: [8.3, 4.2, 5.35], 8: [8.9, 4.7, 5.35], 17: [7.6, 3.7, 5.35],
-  6: [8.1, 1.2, 6.5], 7: [8.7, 1.8, 6.5],
-  3: [2.0, 1.15, 8.05], 2: [5.2, 0.95, 7.75], 20: [3.4, 1.3, 8.0],
-  11: [1.5, 1.7, 8.05], 21: [5.3, 1.15, 7.75]
-};
-
-const NOTES = {
-  1: [22, 168], 5: [22, 292], 13: [22, 424], 9: [22, 556],
-  19: [22, 230], 15: [22, 360],
-  12: [22, 200], 16: [22, 320], 18: [22, 440], 10: [22, 640],
-  14: [22, 520],
-  3: [1268, 168], 2: [1268, 300], 4: [1268, 440], 8: [1268, 572],
-  20: [1268, 210], 11: [1268, 340], 21: [1268, 470],
-  17: [1268, 230], 6: [1268, 360], 7: [1268, 500]
-};
-
-const SCRAPS = [
-  { src: "images/study.svg", x: 210, y: 188, w: 70, r: -5, to: 1 },
-  { src: "images/talk.svg", x: 206, y: 444, w: 64, r: 4, to: 13 },
-  { src: "images/subway.svg", x: 200, y: 576, w: 68, r: -3, to: 9 },
-  { src: "images/window.svg", x: 1168, y: 176, w: 62, r: 4, to: 3 },
-  { src: "images/cigarette.svg", x: 1164, y: 452, w: 64, r: -4, to: 4 },
-  { src: "images/lighter.svg", x: 1170, y: 590, w: 58, r: 5, to: 8 }
+const ANNOS = [
+  { date: "2026-09-07", text: "“What does this mean?” peaked this week. Midterm season." },
+  { date: "2026-09-14", text: "A very smoking-heavy week." },
+  { date: "2026-09-21", text: "A lot of “I miss you.” Not a great week emotionally." },
+  { date: "2026-09-28", text: "Travel and money phrases increased." },
+  { date: "2026-10-03", text: "“Help me send an email.” Again." }
 ];
 
-const svg = document.getElementById("sheet");
-const layer = document.getElementById("layer");
+const SVG_W = 1180;
+const SVG_H = 820;
+const PAD_L = 168;
+const PAD_R = 36;
+const AXIS_Y = 748;
+
+const state = {
+  phraseId: null,
+  category: "ALL",
+  date: null,
+  hoverPhrase: null,
+  hoverDate: null,
+  hoverMatrix: null
+};
+
+const flow = document.getElementById("flow");
 const tip = document.getElementById("tip");
-const NS = "http://www.w3.org/2000/svg";
+const detail = document.getElementById("detail");
+const filters = document.getElementById("filters");
+let dailyChart = null;
+let matrixChart = null;
 
-let frequencyChart = null;
-let categoryChart = null;
-let locked = null;
-let hover = null;
-const anchors = {};
-const queue = [];
-
-function iso(x, y, z) {
-  return [
-    OX + (x - y) * UX,
-    OY + (x + y) * UY - z * UZ
-  ];
+const dates = [];
+{
+  const cursor = new Date(2026, 8, 5);
+  const end = new Date(2026, 9, 5);
+  while (cursor <= end) {
+    const m = String(cursor.getMonth() + 1).padStart(2, "0");
+    const d = String(cursor.getDate()).padStart(2, "0");
+    dates.push(`${cursor.getFullYear()}-${m}-${d}`);
+    cursor.setDate(cursor.getDate() + 1);
+  }
 }
 
-function groupColor(id) {
-  const found = GROUPS.find((g) => g.id === id);
-  return found ? found.color : FRAME;
+phrases.forEach((phrase) => {
+  phrase.count = dailyOccurrences
+    .filter((row) => row.phraseId === phrase.id)
+    .reduce((sum, row) => sum + row.count, 0);
+});
+
+function catOf(id) {
+  return CATS.find((cat) => cat.id === id);
 }
 
-function groupName(id) {
-  const found = GROUPS.find((g) => g.id === id);
-  return found ? found.name : "";
+function phraseById(id) {
+  return phrases.find((phrase) => phrase.id === id);
 }
 
-function node(name, attrs) {
-  const el = document.createElementNS(NS, name);
+function rowsOn(date, phraseId) {
+  return dailyOccurrences.filter((row) => row.date === date && (phraseId == null || row.phraseId === phraseId));
+}
+
+function dayTotal(date) {
+  return rowsOn(date).reduce((sum, row) => sum + row.count, 0);
+}
+
+function categoryTotal(date, category) {
+  return rowsOn(date)
+    .filter((row) => phraseById(row.phraseId).category === category)
+    .reduce((sum, row) => sum + row.count, 0);
+}
+
+function activeDays(phraseId) {
+  return new Set(dailyOccurrences.filter((row) => row.phraseId === phraseId).map((row) => row.date)).size;
+}
+
+function dateX(index) {
+  const inner = SVG_W - PAD_L - PAD_R;
+  return PAD_L + inner * ((index + 0.5) / dates.length);
+}
+
+function wobble(seed, amount) {
+  const n = Math.sin(seed * 12.9898) * 43758.5453;
+  return (n - Math.floor(n) - 0.5) * amount;
+}
+
+function radius(count) {
+  return 7 + Math.sqrt(count) * 3.15;
+}
+
+function labelDate(iso) {
+  const [, m, d] = iso.split("-");
+  const month = m === "09" ? "Sep" : "Oct";
+  return `${month} ${d}`;
+}
+
+function focusIds() {
+  if (state.hoverPhrase) return new Set([state.hoverPhrase]);
+  if (state.phraseId) return new Set([state.phraseId]);
+  if (state.hoverMatrix) {
+    const ids = rowsOn(state.hoverMatrix.date)
+      .filter((row) => phraseById(row.phraseId).category === state.hoverMatrix.category)
+      .map((row) => row.phraseId);
+    return new Set(ids);
+  }
+  if (state.category !== "ALL") {
+    return new Set(phrases.filter((phrase) => phrase.category === state.category).map((phrase) => phrase.id));
+  }
+  const day = state.hoverDate || state.date;
+  if (day) return new Set(rowsOn(day).map((row) => row.phraseId));
+  return null;
+}
+
+function activeDay() {
+  return state.hoverDate || state.date || (state.hoverMatrix && state.hoverMatrix.date) || null;
+}
+
+function svgEl(name, attrs) {
+  const el = document.createElementNS("http://www.w3.org/2000/svg", name);
   Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
   return el;
 }
 
-function tint(hex, amt) {
-  const n = parseInt(hex.slice(1), 16);
-  const ch = (v) => Math.max(0, Math.min(255, v + amt)).toString(16).padStart(2, "0");
-  return "#" + ch((n >> 16) & 255) + ch((n >> 8) & 255) + ch(n & 255);
-}
-
-function face(pts, fill, stroke, cat, depth) {
-  const poly = node("polygon", {
-    points: pts.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" "),
-    fill,
-    stroke,
-    "stroke-width": "0.8",
-    "stroke-linejoin": "round"
+function labelLines(text) {
+  if (text.length <= 20) return [text];
+  const words = text.split(" ");
+  const lines = [];
+  let line = "";
+  words.forEach((word) => {
+    const next = line ? `${line} ${word}` : word;
+    if (line && next.length > 18) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = next;
+    }
   });
-  if (cat) {
-    poly.dataset.cat = cat;
-    poly.classList.add("zone");
-  }
-  queue.push({ depth, node: poly });
+  if (line) lines.push(line);
+  return lines.slice(0, 2);
 }
 
-function edge(a, b, stroke, width, depth, dash) {
-  const line = node("line", {
-    x1: a[0].toFixed(1),
-    y1: a[1].toFixed(1),
-    x2: b[0].toFixed(1),
-    y2: b[1].toFixed(1),
-    stroke,
-    "stroke-width": String(width)
+function buildFlow() {
+  flow.setAttribute("viewBox", `0 0 ${SVG_W} ${SVG_H}`);
+  const guides = svgEl("g", { id: "guides" });
+  const links = svgEl("g", { id: "links" });
+  const nodes = svgEl("g", { id: "nodes" });
+  const hits = svgEl("g", { id: "day-hits" });
+  const wash = svgEl("rect", {
+    id: "day-wash", x: 0, y: 28, width: 18, height: AXIS_Y - 28,
+    fill: "rgba(36,31,28,0.045)", visibility: "hidden"
   });
-  if (dash) line.setAttribute("stroke-dasharray", dash);
-  queue.push({ depth, node: line });
-}
-
-function box(x, y, z, w, d, h, key) {
-  const fill = key ? groupColor(key) : FRAME;
-  const stroke = key ? tint(fill, -28) : "#e3d4cc";
-  const top = fill;
-  const south = tint(fill, key ? -16 : -6);
-  const east = tint(fill, key ? -26 : -12);
-  const depth = x + y + z * 0.03;
-  face([
-    iso(x, y, z + h), iso(x + w, y, z + h), iso(x + w, y + d, z + h), iso(x, y + d, z + h)
-  ], top, stroke, key, depth + 0.02);
-  face([
-    iso(x + w, y, z), iso(x + w, y + d, z), iso(x + w, y + d, z + h), iso(x + w, y, z + h)
-  ], east, stroke, key, depth + 0.01);
-  face([
-    iso(x, y + d, z), iso(x + w, y + d, z), iso(x + w, y + d, z + h), iso(x, y + d, z + h)
-  ], south, stroke, key, depth);
-}
-
-function slab(x, y, z, w, d, key) {
-  box(x, y, z, w, d, 0.1, key || null);
-  const step = 1;
-  for (let i = step; i < w; i += step) {
-    edge(iso(x + i, y, z + 0.1), iso(x + i, y + d, z + 0.1), "rgba(190,160,150,0.35)", 0.45, x + y + 0.2);
-  }
-  for (let j = step; j < d; j += step) {
-    edge(iso(x, y + j, z + 0.1), iso(x + w, y + j, z + 0.1), "rgba(190,160,150,0.35)", 0.45, x + y + 0.2);
-  }
-}
-
-function column(x, y, z0, z1) {
-  box(x, y, z0, 0.11, 0.11, z1 - z0, null);
-}
-
-function rail(x, y, z, length, axis) {
-  const posts = Math.max(2, Math.round(length / 0.7));
-  for (let i = 0; i <= posts; i += 1) {
-    const t = (length * i) / posts;
-    const px = axis === "x" ? x + t : x;
-    const py = axis === "y" ? y + t : y;
-    edge(iso(px, py, z), iso(px, py, z + 0.38), "#d9c8c0", 0.7, px + py + 0.4);
-  }
-  const x2 = axis === "x" ? x + length : x;
-  const y2 = axis === "y" ? y + length : y;
-  edge(iso(x, y, z + 0.38), iso(x2, y2, z + 0.38), "#d9c8c0", 0.7, x + y + 0.5);
-}
-
-function tree(x, y, z, r) {
-  const p = iso(x, y, z);
-  const g = node("g", {});
-  g.appendChild(node("line", {
-    x1: p[0], y1: p[1], x2: p[0], y2: p[1] - r * 0.9,
-    stroke: "#c2ae98", "stroke-width": "0.8"
-  }));
-  g.appendChild(node("ellipse", {
-    cx: p[0], cy: p[1] - r * 1.15, rx: r * 1.35, ry: r * 0.78,
-    fill: "#d7ebc4", stroke: "#b7cba4", "stroke-width": "0.6"
-  }));
-  queue.push({ depth: x + y + z * 0.03 + 0.2, node: g });
-}
-
-function person(x, y, z) {
-  const p = iso(x, y, z);
-  const g = node("g", { transform: `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})` });
-  g.appendChild(node("circle", {
-    cx: "0", cy: "-15", r: "2.1", fill: "none", stroke: "#3a342e", "stroke-width": "0.8"
-  }));
-  g.appendChild(node("path", {
-    d: "M0 -13 V-6 M0 -10 L-4.2 -6.2 M0 -10 L4.2 -6 M0 -6 L-3 1.5 M0 -6 L3.2 1.5",
-    fill: "none", stroke: "#3a342e", "stroke-width": "0.8"
-  }));
-  queue.push({ depth: x + y + z * 0.03 + 0.25, node: g });
-}
-
-function label(text, x, y, z) {
-  const p = iso(x, y, z);
-  const t = node("text", { x: p[0] + 6, y: p[1] - 4, "font-size": "8" });
-  t.textContent = text;
-  queue.push({ depth: 100, node: t });
-}
-
-function buildBuilding() {
-  slab(-1.8, -1.4, 0, 14.2, 12.2);
-  edge(iso(-1.8, -1.4, 0.1), iso(12.4, -1.4, 0.1), "#eadfd6", 0.6, 0);
-  slab(4.6, 8.15, 0.02, 1.7, 3.3, null);
-  box(4.0, 3.3, 0.12, 2.5, 2.2, 0.05, null);
-
-  const xs = [0, 3.5, 6.7, 10];
-  const ys = [0, 2.6, 5.4, 8];
-  xs.forEach((x) => ys.forEach((y) => {
-    const inside = x > 0.2 && x < 9.8 && y > 0.2 && y < 7.8 && !(x === 3.5 || x === 6.7 || y === 2.6 || y === 5.4);
-    if (inside) return;
-    column(x, y, 0.12, 8.05);
-  }));
-
-  [2.05, 3.6, 5.2, 6.85].forEach((z) => {
-    xs.forEach((x) => edge(iso(x + 0.08, 0, z), iso(x + 0.08, 8, z), "#e7d5cc", 0.7, x));
-    ys.forEach((y) => edge(iso(0, y + 0.08, z), iso(10, y + 0.08, z), "#e7d5cc", 0.7, y));
-  });
-
-  slab(0, 0, 2.05, 10, 2.45);
-  slab(0, 2.45, 2.05, 3.35, 5.55, null);
-  slab(6.7, 2.45, 2.05, 3.3, 5.55, null);
-  slab(3.35, 6.55, 2.05, 3.35, 1.45, "daily");
-
-  box(0.35, 3.3, 2.15, 2.5, 2.15, 1.25, "daily");
-  box(7.15, 2.9, 2.15, 2.35, 1.9, 1.2, "daily");
-
-  for (let i = 0; i < 8; i += 1) {
-    box(4.35, 8.15 + i * 0.4, 1.9 - i * 0.22, 1.7, 0.38, 0.1, null);
-  }
-  rail(0.15, 8.0, 2.15, 3.1, "x");
-  rail(6.9, 8.0, 2.15, 3.0, "x");
-
-  slab(0.15, 0.2, 3.6, 3.3, 4.6, null);
-  slab(6.85, 0.2, 3.6, 3.05, 4.2, null);
-  slab(3.45, 0.2, 3.6, 3.4, 1.7);
-
-  box(0.35, 0.4, 3.7, 2.85, 2.35, 1.4, "work");
-  box(0.7, 0.7, 5.1, 1.15, 0.7, 0.08, null);
-  box(7.2, 4.7, 3.7, 1.8, 1.35, 1.0, "work");
-  rail(3.5, 1.9, 3.7, 3.3, "x");
-
-  slab(0.3, 0.3, 5.2, 3.15, 2.35, null);
-  box(0.45, 0.45, 5.3, 2.7, 1.9, 1.2, "relationships");
-  slab(0.55, 2.35, 5.2, 2.5, 1.25, null);
-  rail(0.55, 3.6, 5.3, 2.5, "x");
-
-  box(7.15, 0.4, 5.25, 2.45, 2.05, 1.15, "habits");
-  slab(6.9, 3.15, 5.15, 2.95, 2.15, "habits");
-  rail(6.9, 5.3, 5.25, 2.95, "x");
-  rail(9.85, 3.15, 5.25, 2.15, "y");
-
-  slab(0.7, 0.4, 6.85, 5.6, 1.9, null);
-  box(1.0, 0.55, 6.95, 2.15, 1.45, 1.1, "inner");
-  box(4.3, 0.5, 6.95, 1.85, 1.3, 0.9, "inner");
-  rail(0.7, 2.3, 6.95, 5.2, "x");
-
-  tree(4.5, 3.8, 0.18, 16);
-  tree(5.6, 4.7, 0.18, 13);
-  tree(5.0, 5.2, 0.18, 11);
-  tree(1.6, 1.5, 6.95, 13);
-  tree(2.8, 1.7, 6.95, 10);
-  tree(7.8, 4.0, 5.25, 12);
-  tree(8.8, 4.5, 5.25, 9);
-  tree(2.4, 4.6, 2.15, 11);
-
-  person(1.5, 1.3, 5.12);
-  person(1.6, 3.0, 5.32);
-  person(5.1, 9.4, 1.15);
-  person(8.2, 1.4, 5.07);
-  person(5.2, 7.3, 2.16);
-  person(2.0, 1.2, 8.02);
-  person(4.8, 4.2, 0.2);
-  person(8.2, 4.2, 5.28);
-
-  label("L01  DAILY LIFE", -2.4, 8.2, 2.6);
-  label("L02  SCHOOL / WORK", -2.4, 8.2, 4.4);
-  label("L03  RELATIONS / HABITS", -2.6, 8.4, 6.1);
-  label("L04  INNER WORLD", -2.4, 8.2, 7.6);
-
-  Object.entries(ANCHOR_AT).forEach(([id, at]) => {
-    anchors[id] = iso(at[0], at[1], at[2]);
-    const dot = node("circle", {
-      cx: anchors[id][0], cy: anchors[id][1], r: "1.7", fill: "#c4847c"
-    });
-    queue.push({ depth: 80, node: dot });
-  });
-}
-
-function buildSite() {
-  const g = node("g", { id: "site" });
-  const ground = node("rect", {
-    x: "0", y: "748", width: "1440", height: "152", fill: "#f7f4ef"
-  });
-  g.appendChild(ground);
-  for (let i = 0; i < 8; i += 1) {
-    g.appendChild(node("line", {
-      x1: "40", y1: String(770 + i * 14),
-      x2: "1400", y2: String(762 + i * 16),
-      stroke: "#efe6dc", "stroke-width": "1"
+  guides.appendChild(wash);
+  dates.forEach((date, index) => {
+    const x = dateX(index);
+    guides.appendChild(svgEl("line", {
+      x1: x, y1: 36, x2: x, y2: AXIS_Y,
+      stroke: "rgba(60,50,40,0.08)", "stroke-dasharray": "1 4", "stroke-width": "1"
     }));
-  }
-  g.appendChild(node("path", {
-    d: "M80 860 C 220 820, 360 870, 520 830",
-    fill: "none", stroke: "#e7dccb", "stroke-width": "8", "stroke-linecap": "round"
-  }));
-  g.appendChild(node("path", {
-    d: "M980 800 C 1120 860, 1260 820, 1380 850",
-    fill: "none", stroke: "#e5efe0", "stroke-width": "10", "stroke-linecap": "round"
-  }));
-
-  const plan = node("g", { id: "footprint", transform: "translate(560 786)" });
-  plan.appendChild(node("rect", {
-    x: "0", y: "12", width: "210", height: "78", fill: "#fbfaf7",
-    stroke: "#e4d8d0", "stroke-width": "0.8"
-  }));
-  [
-    { cat: "work", x: 8, y: 18, w: 58, h: 28 },
-    { cat: "relationships", x: 8, y: 48, w: 58, h: 34 },
-    { cat: "inner", x: 70, y: 18, w: 62, h: 28 },
-    { cat: "daily", x: 70, y: 48, w: 62, h: 34 },
-    { cat: "habits", x: 136, y: 18, w: 66, h: 64 }
-  ].forEach((part) => {
-    const rect = node("rect", {
-      x: String(part.x), y: String(part.y),
-      width: String(part.w), height: String(part.h),
-      fill: groupColor(part.cat),
-      stroke: tint(groupColor(part.cat), -24),
-      "stroke-width": "0.6",
-      class: "zone",
-      "data-cat": part.cat
+    if (index % 7 === 0 || index === dates.length - 1) {
+      const text = svgEl("text", { class: "axis", x, y: AXIS_Y + 22, "text-anchor": "middle" });
+      text.textContent = labelDate(date);
+      guides.appendChild(text);
+    }
+    const hit = svgEl("rect", {
+      class: "day-hit", x: x - 14, y: AXIS_Y - 6, width: 28, height: 34, fill: "transparent"
     });
-    plan.appendChild(rect);
+    hit.dataset.date = date;
+    hits.appendChild(hit);
   });
-  const cap = node("text", { x: "0", y: "8", "font-size": "8" });
-  cap.textContent = "GROUND / FOOTPRINT";
-  plan.appendChild(cap);
-  g.appendChild(plan);
+  guides.appendChild(svgEl("line", {
+    x1: PAD_L, y1: AXIS_Y, x2: SVG_W - PAD_R, y2: AXIS_Y,
+    stroke: "rgba(40,34,30,0.35)", "stroke-width": "1"
+  }));
 
-  const sub = node("text", { x: "560", y: "882", "font-size": "10", fill: "#8d7f76" });
-  sub.textContent = "A MONTH CAN BE RECONSTRUCTED FROM THE THINGS WE REPEAT.";
-  g.appendChild(sub);
-
-  const corners = [iso(0, 0, 0), iso(10, 0, 0), iso(10, 8, 0.1), iso(0, 8, 0.1)];
-  const planPts = [[560, 798], [770, 798], [770, 864], [560, 864]];
-  corners.forEach((c, i) => {
-    const line = node("line", {
-      x1: c[0], y1: c[1], x2: planPts[i][0], y2: planPts[i][1],
-      stroke: "rgba(180,150,140,0.45)", "stroke-width": "0.7", "stroke-dasharray": "1.2 3.2"
-    });
-    g.appendChild(line);
-  });
-
-  svg.insertBefore(g, svg.firstChild);
-}
-
-function flush() {
-  const mass = node("g", { id: "mass" });
-  queue.sort((a, b) => a.depth - b.depth);
-  queue.forEach((item) => mass.appendChild(item.node));
-  svg.appendChild(mass);
-  queue.length = 0;
-}
-
-function buildLayer() {
   phrases.forEach((phrase) => {
-    const at = NOTES[phrase.id];
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = FEATURED.has(phrase.id) ? "note" : "note is-extra";
-    btn.dataset.cat = GROUP_OF[phrase.id];
-    btn.dataset.id = String(phrase.id);
-    btn.dataset.x = String(at[0]);
-    btn.dataset.y = String(at[1]);
-    btn.innerHTML = `<span class="idx">${String(phrase.id).padStart(2, "0")}</span><h3>${phrase.phrase.toUpperCase()}</h3><span class="meta">${phrase.count} TIMES · ${groupName(GROUP_OF[phrase.id])}</span>`;
-    layer.appendChild(btn);
-  });
-
-  SCRAPS.forEach((scrap) => {
-    const el = document.createElement("button");
-    el.type = "button";
-    el.className = "scrap";
-    el.dataset.cat = GROUP_OF[scrap.to];
-    el.dataset.id = String(scrap.to);
-    el.dataset.x = String(scrap.x);
-    el.dataset.y = String(scrap.y);
-    el.style.setProperty("--w", scrap.w + "px");
-    el.innerHTML = `<img src="${scrap.src}" alt="">`;
-    el.style.transform = `translate(-50%, -50%) rotate(${scrap.r}deg)`;
-    layer.appendChild(el);
-  });
-
-  const key = document.getElementById("key");
-  key.replaceChildren();
-  GROUPS.forEach((group) => {
-    const b = document.createElement("button");
-    b.type = "button";
-    b.dataset.cat = group.id;
-    b.innerHTML = `<i style="background:${group.color}"></i>${group.name}`;
-    b.addEventListener("click", (e) => {
-      e.stopPropagation();
-      locked = locked === group.id ? null : group.id;
-      applyFilter();
+    const spot = PLACE[phrase.id];
+    const cx = PAD_L + spot.x * (SVG_W - PAD_L - PAD_R);
+    const cy = spot.y;
+    const r = radius(phrase.count);
+    const color = catOf(phrase.category).color;
+    dailyOccurrences.filter((row) => row.phraseId === phrase.id).forEach((row) => {
+      const x2 = dateX(dates.indexOf(row.date));
+      const bend = wobble(phrase.id * 17 + dates.indexOf(row.date), 36);
+      const d = `M ${cx} ${cy + r * 0.2} C ${cx + bend} ${(cy + AXIS_Y) / 2} ${x2 - bend * 0.35} ${AXIS_Y - 90} ${x2} ${AXIS_Y}`;
+      const path = svgEl("path", {
+        class: "link",
+        d,
+        stroke: color,
+        "stroke-width": String(0.35 + Math.min(row.count, 8) * 0.28),
+        "data-id": String(phrase.id),
+        "data-date": row.date
+      });
+      const hit = svgEl("path", {
+        class: "link-hit",
+        d,
+        stroke: "transparent",
+        "stroke-width": "8",
+        "data-id": String(phrase.id),
+        "data-date": row.date
+      });
+      links.append(path, hit);
     });
-    key.appendChild(b);
+    const group = svgEl("g", { class: "node", "data-id": String(phrase.id) });
+    group.appendChild(svgEl("circle", {
+      cx, cy, r, fill: color, stroke: "#241f1c", "stroke-width": "1.1"
+    }));
+    if (phrase.count >= 26) {
+      group.appendChild(svgEl("path", {
+        d: `M ${cx - r * 0.45} ${cy - r * 0.2} q ${r * 0.4} ${r * 0.15} ${r * 0.9} ${-r * 0.05}`,
+        fill: "none", stroke: "rgba(36,31,28,0.35)", "stroke-width": "0.7"
+      }));
+    }
+    const lines = labelLines(phrase.phrase);
+    const size = phrase.count > 20 ? 20 : 15;
+    const lead = size - 3;
+    lines.forEach((line, index) => {
+      let x = cx;
+      let y = cy - r - 8 - (lines.length - 1 - index) * lead;
+      let anchor = "middle";
+      if (spot.label === "e") {
+        x = cx + r + 8;
+        y = cy + 4 - ((lines.length - 1) / 2 - index) * lead;
+        anchor = "start";
+      } else if (spot.label === "w") {
+        x = cx - r - 8;
+        y = cy + 4 - ((lines.length - 1) / 2 - index) * lead;
+        anchor = "end";
+      } else if (spot.label === "s") {
+        y = cy + r + 16 + index * lead;
+      }
+      const label = svgEl("text", {
+        x, y, "text-anchor": anchor, "font-size": String(size)
+      });
+      label.textContent = line;
+      group.appendChild(label);
+    });
+    nodes.appendChild(group);
+  });
+
+  flow.append(guides, links, nodes, hits);
+}
+
+function buildAnnos() {
+  const row = document.getElementById("annos");
+  ANNOS.forEach((item) => {
+    const index = dates.indexOf(item.date);
+    const p = document.createElement("p");
+    p.className = "anno";
+    const pct = ((index + 0.5) / dates.length) * 100;
+    p.style.left = `${pct}%`;
+    p.style.top = index % 2 === 0 ? "0" : "52px";
+    if (pct > 78) {
+      p.style.transform = "translateX(-100%)";
+      p.style.textAlign = "right";
+    }
+    p.innerHTML = `<strong>${labelDate(item.date).toUpperCase()}</strong>${item.text}`;
+    row.appendChild(p);
   });
 }
 
-function toScreen(x, y) {
-  const pt = svg.createSVGPoint();
-  pt.x = x;
-  pt.y = y;
-  const m = svg.getScreenCTM();
-  return pt.matrixTransform(m);
-}
-
-function toSvg(x, y) {
-  const pt = svg.createSVGPoint();
-  pt.x = x;
-  pt.y = y;
-  return pt.matrixTransform(svg.getScreenCTM().inverse());
-}
-
-function layout() {
-  const scale = Math.min(window.innerWidth / 1440, window.innerHeight / 900);
-  document.getElementById("poster").style.transform = `scale(${scale})`;
-  layer.querySelectorAll("[data-x]").forEach((el) => {
-    el.style.left = el.dataset.x + "px";
-    el.style.top = el.dataset.y + "px";
+function buildFilters() {
+  [["ALL", "ALL"], ...CATS.map((cat) => [cat.id, cat.name])].forEach(([id, name]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.cat = id;
+    button.textContent = name;
+    button.addEventListener("click", () => {
+      state.category = state.category === id ? "ALL" : id;
+      state.phraseId = null;
+      state.date = null;
+      render();
+    });
+    filters.appendChild(button);
   });
-  drawLeaders();
+  const reset = document.createElement("button");
+  reset.type = "button";
+  reset.dataset.cat = "RESET";
+  reset.textContent = "RESET";
+  reset.addEventListener("click", () => {
+    state.phraseId = null;
+    state.category = "ALL";
+    state.date = null;
+    state.hoverPhrase = null;
+    state.hoverDate = null;
+    state.hoverMatrix = null;
+    tip.hidden = true;
+    render();
+  });
+  filters.appendChild(reset);
 }
 
-function drawLeaders() {
-  let lines = svg.querySelector("#leaders");
-  if (!lines) {
-    lines = node("g", { id: "leaders" });
-    svg.appendChild(lines);
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const left = Math.min(x + 14, window.innerWidth - 280);
+  const top = Math.min(y + 14, window.innerHeight - 140);
+  tip.style.left = `${left}px`;
+  tip.style.top = `${top}px`;
+}
+
+function phraseTip(phrase) {
+  return `<p class="phrase">${phrase.phrase}</p><p class="meta">${phrase.count} TIMES · ${catOf(phrase.category).name}</p><p class="note">${phrase.note}</p>`;
+}
+
+function dayLines(date) {
+  const rows = rowsOn(date).slice().sort((a, b) => b.count - a.count);
+  const lines = rows.map((row) => {
+    const phrase = phraseById(row.phraseId);
+    return `<p class="phrase">${phrase.phrase}</p><p class="meta">${row.count} ${row.count === 1 ? "TIME" : "TIMES"}</p>`;
+  }).join("");
+  return `<p class="meta">${labelDate(date).toUpperCase()} · ${dayTotal(date)} TIMES</p>${lines}`;
+}
+
+function renderDetail() {
+  if (state.phraseId) {
+    const phrase = phraseById(state.phraseId);
+    detail.hidden = false;
+    detail.innerHTML = `
+      <p class="kicker">PHRASE</p>
+      <h2>${phrase.phrase}</h2>
+      <p class="meta">${phrase.count} TIMES</p>
+      <p class="meta">CATEGORY<br>${catOf(phrase.category).name}</p>
+      <p class="meta">ACTIVE DAYS<br>${activeDays(phrase.id)} DAYS</p>
+      <p class="note">${phrase.note}</p>`;
+    return;
   }
-  lines.replaceChildren();
-  [...layer.querySelectorAll(".note, .scrap")].forEach((el) => {
-    const anchor = anchors[el.dataset.id];
-    if (!anchor) return;
-    const active = hover || locked;
-    const visible = !el.classList.contains("is-extra") || (active && el.dataset.cat === active);
-    if (!visible || (active && el.dataset.cat !== active)) return;
-    const box = el.getBoundingClientRect();
-    if (box.width < 2) return;
-    const from = toSvg(box.left + (el.dataset.x > 700 ? 8 : box.width - 8), box.top + 18);
-    const path = node("path", { class: "leader", "data-cat": el.dataset.cat, "data-id": el.dataset.id });
-    const mx = (from.x + anchor[0]) / 2;
-    const my = (from.y + anchor[1]) / 2;
-    path.setAttribute("d", `M ${from.x.toFixed(1)} ${from.y.toFixed(1)} Q ${mx.toFixed(1)} ${my.toFixed(1)} ${anchor[0].toFixed(1)} ${anchor[1].toFixed(1)}`);
-    if (el.classList.contains("is-selected")) path.classList.add("is-active");
-    lines.appendChild(path);
-  });
+  if (state.date) {
+    const rows = rowsOn(state.date).slice().sort((a, b) => b.count - a.count);
+    const byCat = {};
+    rows.forEach((row) => {
+      const category = phraseById(row.phraseId).category;
+      byCat[category] = (byCat[category] || 0) + row.count;
+    });
+    const topCat = Object.entries(byCat).sort((a, b) => b[1] - a[1])[0];
+    detail.hidden = false;
+    detail.innerHTML = `
+      <p class="kicker">DAY</p>
+      <h2>${labelDate(state.date).toUpperCase()}</h2>
+      <p class="meta">TOTAL OCCURRENCES: ${dayTotal(state.date)}</p>
+      <p class="meta">MOST ACTIVE<br>${topCat ? catOf(topCat[0]).name : "—"}</p>
+      <p class="meta">TOP PHRASES</p>
+      ${rows.slice(0, 4).map((row) => `<p class="note">${phraseById(row.phraseId).phrase} × ${row.count}</p>`).join("")}`;
+    return;
+  }
+  detail.hidden = true;
+  detail.innerHTML = "";
 }
 
-function categorySums() {
-  const totals = {};
-  GROUPS.forEach((g) => { totals[g.id] = 0; });
-  phrases.forEach((p) => {
-    totals[GROUP_OF[p.id]] += p.count;
+function paintSvg() {
+  const focus = focusIds();
+  const day = activeDay();
+  const lockPhrase = state.hoverPhrase || state.phraseId;
+  flow.querySelectorAll(".link").forEach((path) => {
+    const on = !focus || focus.has(Number(path.dataset.id));
+    const dayOn = !day || path.dataset.date === day || lockPhrase;
+    path.style.opacity = on && dayOn ? (focus ? "0.92" : "0.24") : "0.04";
   });
-  return totals;
+  flow.querySelectorAll(".node").forEach((node) => {
+    const on = !focus || focus.has(Number(node.dataset.id));
+    node.style.opacity = on ? "1" : "0.14";
+  });
+  const wash = document.getElementById("day-wash");
+  if (day) {
+    const x = dateX(dates.indexOf(day));
+    wash.setAttribute("x", String(x - 11));
+    wash.setAttribute("width", "22");
+    wash.setAttribute("visibility", "visible");
+  } else {
+    wash.setAttribute("visibility", "hidden");
+  }
+  filters.querySelectorAll("button").forEach((button) => {
+    const pressed = button.dataset.cat !== "RESET" && button.dataset.cat === state.category;
+    button.setAttribute("aria-pressed", String(pressed));
+  });
+  renderDetail();
 }
+
+function dotColor(dataset, point) {
+  const cat = catOf(dataset.categoryId);
+  const locked = state.hoverPhrase || state.phraseId;
+  if (locked) {
+    const phrase = phraseById(locked);
+    if (phrase.category !== dataset.categoryId) return "rgba(220,214,206,0.28)";
+    const hit = dailyOccurrences.some((row) => row.phraseId === phrase.id && row.date === point.date);
+    return hit ? cat.color : "rgba(220,214,206,0.4)";
+  }
+  if (state.hoverMatrix && state.hoverMatrix.category !== dataset.categoryId) return "rgba(220,214,206,0.28)";
+  if (state.category !== "ALL" && dataset.categoryId !== state.category) return "rgba(220,214,206,0.28)";
+  return cat.color;
+}
+
+function paint() {
+  paintSvg();
+  paintCharts();
+}
+
+let chartLock = false;
+
+function paintCharts() {
+  if (!dailyChart || !matrixChart || chartLock) return;
+  chartLock = true;
+  matrixChart.data.datasets.forEach((dataset) => {
+    dataset.backgroundColor = dataset.data.map((point) => dotColor(dataset, point));
+  });
+  matrixChart.update("none");
+  dailyChart.draw();
+  chartLock = false;
+}
+
+const dayMark = {
+  id: "dayMark",
+  afterDatasetsDraw(chart) {
+    const day = activeDay();
+    if (!day) return;
+    const bar = chart.getDatasetMeta(0).data[dates.indexOf(day)];
+    if (!bar) return;
+    const { ctx, chartArea } = chart;
+    ctx.save();
+    ctx.fillStyle = "rgba(36,31,28,0.06)";
+    ctx.fillRect(bar.x - 8, chartArea.top, 16, chartArea.bottom - chartArea.top);
+    ctx.restore();
+  }
+};
+
+const alignPlot = {
+  id: "alignPlot",
+  beforeLayout(chart) {
+    const left = chart.width * (PAD_L / SVG_W);
+    const right = chart.width * (PAD_R / SVG_W);
+    chart.options.layout.padding.right = right;
+    chart.options.scales.y.afterFit = (scale) => {
+      scale.width = left;
+    };
+  }
+};
 
 function buildCharts() {
-  const ink = "#7d716a";
-  const grid = "rgba(140, 120, 110, 0.18)";
-  const sorted = phrases.slice().sort((a, b) => b.count - a.count || a.id - b.id);
-  const freqCanvas = document.getElementById("frequency-chart");
-  const catCanvas = document.getElementById("category-chart");
-  freqCanvas.width = 392;
-  freqCanvas.height = 184;
-  catCanvas.width = 168;
-  catCanvas.height = 168;
-  frequencyChart = new Chart(freqCanvas, {
+  const ink = "#6f675f";
+  const mono = { size: 9, family: "IBM Plex Mono" };
+  const dateTick = (value) => {
+    const index = Math.round(value);
+    if (Math.abs(value - index) > 0.01 || index < 0 || index >= dates.length) return "";
+    return index % 7 === 0 || index === dates.length - 1 ? labelDate(dates[index]) : "";
+  };
+
+  dailyChart = new Chart(document.getElementById("daily-chart"), {
     type: "bar",
+    plugins: [dayMark],
     data: {
-      labels: sorted.map((p) => String(p.id).padStart(2, "0")),
+      labels: dates,
       datasets: [{
-        data: sorted.map((p) => p.count),
-        backgroundColor: sorted.map((p) => groupColor(GROUP_OF[p.id])),
+        data: dates.map(dayTotal),
+        backgroundColor: "rgba(90,82,74,0.28)",
         borderWidth: 0,
-        barPercentage: 0.72,
-        categoryPercentage: 0.82
+        barPercentage: 0.28,
+        categoryPercentage: 0.9
       }]
     },
     options: {
-      indexAxis: "y",
-      responsive: false,
+      responsive: true,
+      maintainAspectRatio: false,
       animation: false,
-      devicePixelRatio: 1,
-      plugins: { legend: { display: false }, tooltip: { enabled: false, external: externalTooltip } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
       scales: {
         x: {
-          grid: { color: grid },
-          border: { display: false },
-          ticks: { color: ink, font: { size: 8, family: "IBM Plex Mono" }, maxTicksLimit: 4 }
-        },
-        y: {
           grid: { display: false },
           border: { display: false },
-          ticks: { color: ink, font: { size: 7, family: "IBM Plex Mono" } }
-        }
+          ticks: { display: false }
+        },
+        y: { display: false }
       },
-      onClick: (evt, els) => { if (els[0]) selectPhrase(sorted[els[0].index].id); }
+      onHover: (event, elements) => {
+        if (chartLock) return;
+        const date = elements[0] ? dates[elements[0].index] : null;
+        if (date === state.hoverDate && !state.hoverPhrase && !state.hoverMatrix) return;
+        state.hoverDate = date;
+        state.hoverPhrase = null;
+        state.hoverMatrix = null;
+        if (date) showTip(dayLines(date), event.native.clientX, event.native.clientY);
+        else tip.hidden = true;
+        paintSvg();
+        chartLock = true;
+        dailyChart.draw();
+        chartLock = false;
+      },
+      onClick: (event, elements) => {
+        if (!elements[0]) return;
+        const date = dates[elements[0].index];
+        state.date = state.date === date ? null : date;
+        state.phraseId = null;
+        state.hoverPhrase = null;
+        paint();
+      }
     }
   });
 
-  const totals = categorySums();
-  const cats = Object.keys(totals);
-  categoryChart = new Chart(catCanvas, {
-    type: "doughnut",
+  matrixChart = new Chart(document.getElementById("matrix-chart"), {
+    type: "bubble",
+    plugins: [alignPlot],
     data: {
-      labels: cats,
-      datasets: [{
-        data: cats.map((c) => totals[c]),
-        backgroundColor: cats.map((c) => groupColor(c)),
-        borderColor: "#fbfaf7",
-        borderWidth: 2
-      }]
+      datasets: CATS.map((cat, index) => ({
+        categoryId: cat.id,
+        data: dates.flatMap((date, x) => {
+          const count = categoryTotal(date, cat.id);
+          if (!count) return [];
+          return [{ x, y: CATS.length - 1 - index, r: Math.min(15, 3.2 + count * 1.05), count, date }];
+        }),
+        backgroundColor: cat.color,
+        borderWidth: 0
+      }))
     },
     options: {
-      responsive: false,
-      cutout: "62%",
+      responsive: true,
+      maintainAspectRatio: false,
       animation: false,
-      devicePixelRatio: 1,
-      plugins: { legend: { display: false }, tooltip: { enabled: false, external: externalTooltip } },
-      onClick: (evt, els) => {
-        if (!els[0]) return;
-        const name = cats[els[0].index];
-        locked = locked === name ? null : name;
-        applyFilter();
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: {
+          min: -0.5,
+          max: dates.length - 0.5,
+          grid: { color: "rgba(60,50,40,0.07)", tickLength: 0, borderDash: [1, 4] },
+          border: { display: false },
+          afterBuildTicks(scale) {
+            scale.ticks = dates.map((date, value) => ({ value }));
+          },
+          ticks: {
+            color: ink,
+            font: mono,
+            autoSkip: false,
+            maxRotation: 0,
+            callback: dateTick
+          }
+        },
+        y: {
+          min: -0.55,
+          max: CATS.length - 0.45,
+          grid: { display: false },
+          border: { display: false },
+          afterBuildTicks(scale) {
+            scale.ticks = CATS.map((cat, value) => ({ value }));
+          },
+          ticks: {
+            color: ink,
+            font: mono,
+            callback: (value) => {
+              const cat = CATS[CATS.length - 1 - value];
+              return cat ? cat.name : "";
+            }
+          }
+        }
+      },
+      onHover: (event, elements) => {
+        if (chartLock) return;
+        if (!elements[0]) {
+          if (!state.hoverMatrix) return;
+          state.hoverMatrix = null;
+          tip.hidden = true;
+          paint();
+          return;
+        }
+        const point = matrixChart.data.datasets[elements[0].datasetIndex].data[elements[0].index];
+        const category = matrixChart.data.datasets[elements[0].datasetIndex].categoryId;
+        const key = `${point.date}-${category}`;
+        if (state.hoverMatrix && state.hoverMatrix.key === key) return;
+        state.hoverMatrix = { date: point.date, category, key };
+        state.hoverPhrase = null;
+        state.hoverDate = null;
+        const rows = rowsOn(point.date)
+          .filter((row) => phraseById(row.phraseId).category === category)
+          .sort((a, b) => b.count - a.count);
+        const body = rows.map((row) => `<p class="phrase">${phraseById(row.phraseId).phrase} × ${row.count}</p>`).join("");
+        const word = point.count === 1 ? "OCCURRENCE" : "OCCURRENCES";
+        showTip(`<p class="meta">${labelDate(point.date).toUpperCase()} · ${catOf(category).name}</p>${body}<p class="meta">${point.count} ${word}</p>`, event.native.clientX, event.native.clientY);
+        paint();
+      },
+      onClick: (event, elements) => {
+        if (!elements[0]) return;
+        const point = matrixChart.data.datasets[elements[0].datasetIndex].data[elements[0].index];
+        state.date = state.date === point.date ? null : point.date;
+        state.phraseId = null;
+        state.hoverPhrase = null;
+        paint();
       }
     }
   });
 }
 
-function externalTooltip(context) {
-  const { chart, tooltip } = context;
-  if (!tooltip || tooltip.opacity === 0) {
-    tip.hidden = true;
-    return;
-  }
-  const item = tooltip.dataPoints && tooltip.dataPoints[0];
-  if (!item) return;
-  const canvas = chart.canvas.getBoundingClientRect();
-  let title = item.label;
-  let meta = `${item.raw} TIMES`;
-  if (chart === frequencyChart) {
-    const sorted = phrases.slice().sort((a, b) => b.count - a.count || a.id - b.id);
-    const phrase = sorted[item.dataIndex];
-    title = phrase.phrase;
-    meta = `${phrase.count} TIMES · ${groupName(GROUP_OF[phrase.id])}`;
-  } else {
-    meta = `${item.raw} TIMES · ${String(item.label).toUpperCase()}`;
-    title = item.label;
-  }
-  tip.innerHTML = `<p class="phrase">${title}</p><p class="meta">${meta}</p>`;
-  tip.style.left = canvas.left + tooltip.caretX + 10 + "px";
-  tip.style.top = canvas.top + tooltip.caretY - 10 + "px";
-  tip.hidden = false;
-}
-
-function selectPhrase(id) {
-  const zone = GROUP_OF[id];
-  const already = layer.querySelector(`.note.is-selected[data-id="${id}"]`);
-  layer.querySelectorAll(".note").forEach((el) => el.classList.remove("is-selected"));
-  if (already) {
-    locked = null;
-  } else {
-    locked = zone;
-    const note = layer.querySelector(`.note[data-id="${id}"]`);
-    if (note) note.classList.add("is-selected");
-  }
-  applyFilter();
-}
-
-function clearLock() {
-  locked = null;
-  hover = null;
-  layer.querySelectorAll(".note").forEach((el) => el.classList.remove("is-selected"));
-  applyFilter();
-}
-
-function applyFilter() {
-  const cat = hover || locked;
-  document.body.classList.toggle("is-filtering", Boolean(cat));
-  document.querySelectorAll("[data-cat]").forEach((el) => {
-    el.classList.toggle("is-on", !cat || el.dataset.cat === cat);
-  });
-  document.querySelectorAll(".key button").forEach((b) => {
-    b.setAttribute("aria-pressed", String(b.dataset.cat === locked));
-  });
-  if (frequencyChart) {
-    const sorted = phrases.slice().sort((a, b) => b.count - a.count || a.id - b.id);
-    frequencyChart.data.datasets[0].backgroundColor = sorted.map((p) => {
-      const on = !cat || GROUP_OF[p.id] === cat;
-      return on ? groupColor(GROUP_OF[p.id]) : "#efeae4";
-    });
-    frequencyChart.update();
-  }
-  if (categoryChart) {
-    const cats = Object.keys(categorySums());
-    categoryChart.data.datasets[0].backgroundColor = cats.map((name) => {
-      return !cat || name === cat ? groupColor(name) : "#efeae4";
-    });
-    categoryChart.update();
-  }
-  drawLeaders();
-}
-
-function bind() {
-  svg.addEventListener("mousemove", (e) => {
-    const cat = (e.target.dataset && e.target.dataset.cat) || null;
-    if (cat === hover) return;
-    hover = cat;
-    applyFilter();
-  });
-  svg.addEventListener("mouseleave", () => {
-    if (!hover) return;
-    hover = null;
-    applyFilter();
-  });
-  svg.addEventListener("click", (e) => {
-    const cat = e.target.dataset && e.target.dataset.cat;
-    if (!cat) return;
-    locked = locked === cat ? null : cat;
-    layer.querySelectorAll(".note").forEach((el) => el.classList.remove("is-selected"));
-    applyFilter();
-  });
-  layer.addEventListener("mouseover", (e) => {
-    const el = e.target.closest("[data-cat]");
-    hover = el ? el.dataset.cat : null;
-    applyFilter();
-  });
-  layer.addEventListener("mouseout", (e) => {
-    if (e.target.closest("[data-cat]")) {
-      hover = null;
-      applyFilter();
+function bindFlow() {
+  flow.addEventListener("mousemove", (event) => {
+    const node = event.target.closest(".node");
+    const day = event.target.closest("[data-date]");
+    if (node) {
+      const id = Number(node.dataset.id);
+      if (state.hoverPhrase !== id) {
+        state.hoverPhrase = id;
+        state.hoverDate = null;
+        state.hoverMatrix = null;
+        showTip(phraseTip(phraseById(id)), event.clientX, event.clientY);
+        paint();
+      }
+      return;
+    }
+    if (day && day.dataset.date) {
+      if (state.hoverDate !== day.dataset.date || state.hoverPhrase || state.hoverMatrix) {
+        state.hoverPhrase = null;
+        state.hoverMatrix = null;
+        state.hoverDate = day.dataset.date;
+        showTip(dayLines(day.dataset.date), event.clientX, event.clientY);
+        paint();
+      }
+      return;
+    }
+    if (state.hoverPhrase || state.hoverDate) {
+      state.hoverPhrase = null;
+      state.hoverDate = null;
+      tip.hidden = true;
+      paint();
     }
   });
-  layer.addEventListener("click", (e) => {
-    const el = e.target.closest(".note, .scrap");
-    if (!el) return;
-    e.stopPropagation();
-    selectPhrase(Number(el.dataset.id));
+  flow.addEventListener("mouseleave", () => {
+    if (!state.hoverPhrase && !state.hoverDate) return;
+    state.hoverPhrase = null;
+    state.hoverDate = null;
+    tip.hidden = true;
+    paint();
   });
-  document.getElementById("reset").addEventListener("click", (e) => {
-    e.stopPropagation();
-    clearLock();
+  flow.addEventListener("click", (event) => {
+    const node = event.target.closest(".node");
+    const day = event.target.closest("[data-date]");
+    if (node) {
+      const id = Number(node.dataset.id);
+      state.phraseId = state.phraseId === id ? null : id;
+      state.date = null;
+      state.hoverDate = null;
+      state.category = "ALL";
+      paint();
+      return;
+    }
+    if (day && day.dataset.date) {
+      state.date = state.date === day.dataset.date ? null : day.dataset.date;
+      state.phraseId = null;
+      paint();
+    }
   });
-  document.getElementById("poster").addEventListener("click", (e) => {
-    if (e.target.closest("[data-cat], .note, .scrap, .key, .insert, #reset")) return;
-    clearLock();
-  });
-  window.addEventListener("resize", layout);
+}
+
+function render() {
+  paint();
 }
 
 function init() {
-  svg.replaceChildren();
-  layer.replaceChildren();
-  buildBuilding();
-  flush();
-  buildSite();
-  buildLayer();
+  buildFlow();
+  buildAnnos();
+  buildFilters();
   buildCharts();
-  bind();
-  layout();
-  applyFilter();
+  bindFlow();
+  render();
 }
 
-if (document.fonts && document.fonts.ready) {
-  document.fonts.ready.then(() => {
-    init();
-    requestAnimationFrame(layout);
-  });
-} else {
-  init();
-}
+init();
